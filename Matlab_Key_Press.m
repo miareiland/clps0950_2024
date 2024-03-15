@@ -1,11 +1,9 @@
 % Create a figure
 figure;
 
-% Define rectangle dimensions
-rect_width = 50;
-rect_height = 75;
+screen_width = 800; % Width of the screen
+screen_height = 600; % Height of the screen
 
-global wKeyPressed sKeyPressed upArrowPressed downArrowPressed;
 
 paddlewidth = 0.015
 paddleheight = 0.15
@@ -14,6 +12,12 @@ paddleheight = 0.15
 paddleA_position = [0, 0.5 - (paddleheight/2), paddlewidth, paddleheight]
 % Player 2 Paddle 
 paddleB_position = [1 - paddlewidth, 0.5 - (paddleheight/2), paddlewidth, paddleheight]
+
+paddleA = rectangle('Position', paddleA_position, 'FaceColor', 'red'); 
+paddleB = rectangle('Position', paddleB_position, 'FaceColor', 'blue');
+
+global wKeyPressed sKeyPressed upArrowPressed downArrowPressed;
+
 
 % Set up KeyPressFcn/KeyReleaseFcn callback function
 set(gcf, 'KeyPressFcn', @keyDown);
@@ -25,7 +29,29 @@ downArrowPressed = false;
 wKeyPressed = false; 
 sKeyPressed = false;
 
-% callback for key press 
+    % Updating movement — updated by storing code inside infinite loop im
+    % showinside
+    
+    while true 
+        if wKeyPressed
+            paddleA_position.Position(2) = paddleA_position.Position(2) + 0.05; 
+            set(paddleA, 'Position', paddleA_position); 
+        elseif sKeyPressed
+            paddleA_position.Position(2) = paddleA_position.Position(2) - 0.05; 
+            set(paddleA, 'Position', paddleA_position); 
+        end 
+
+        if downArrowPressed
+            paddleB_position.Position(2) = paddleB_position.Position(2) - 0.05;
+            set(paddleB, 'Position', paddleB_position); 
+        elseif upArrowPressed
+            paddleB_position.Position(2) = paddleB_position.Position(2) + 0.05; 
+            set(paddleB, 'Position', paddleB_position);
+        end
+      pause(0.01); 
+    end 
+
+    % callback for key press 
     % Callback function for key press
     function keyDown(~, event)
         switch event.Key
@@ -53,19 +79,3 @@ sKeyPressed = false;
                 sKeyPressed = false;
         end
     end
-    % Updating movement — updated by storing code inside infinite loop 
-    
-    while true 
-        if wKeyPressed
-            paddleA_position.Position(2) = paddleA_position.Position(2) + 0.01; 
-        elseif sKeyPressed
-            paddleA_position.Position(2) = paddleA_position.Position(2) - 0.01; 
-        end 
-
-        if downArrowPressed
-            paddleB_position.Position(2) = paddleB_position.Position(2) - 0.01;
-        elseif upArrowPressed
-            paddleB_position.Position(2) = paddleB_position.Position(2) + 0.01; 
-        end
-        pause(0.01); 
-    end 
